@@ -29,6 +29,25 @@
 #include "php_pdo_sqlite_int.h"
 #include "zend_exceptions.h"
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_pdo_sqlite_create_function, 0, 0, 2)
+	ZEND_ARG_INFO(0, name)
+	ZEND_ARG_CALLABLE_INFO(0, callback, 0)
+	ZEND_ARG_INFO(0, argcount)
+	ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_pdo_sqlite_create_aggregate, 0, 0, 3)
+	ZEND_ARG_INFO(0, name)
+	ZEND_ARG_INFO(0, step)
+	ZEND_ARG_INFO(0, fini)
+	ZEND_ARG_INFO(0, argcount)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_pdo_sqlite_create_collation, 0)
+	ZEND_ARG_INFO(0, name)
+	ZEND_ARG_CALLABLE_INFO(0, callback, 0)
+ZEND_END_ARG_INFO()
+
 int _pdo_sqlite_error(pdo_dbh_t *dbh, pdo_stmt_t *stmt, const char *file, int line) /* {{{ */
 {
 	pdo_sqlite_db_handle *H = (pdo_sqlite_db_handle *)dbh->driver_data;
@@ -510,9 +529,9 @@ static int php_sqlite3_collation_callback(void *context,
 	return ret;
 }
 
-/* {{{ bool SQLite::sqliteCreateFunction(string name, mixed callback [, int argcount, int flags])
+/* {{{ bool PDO::sqliteCreateFunction(string name, mixed callback [, int argcount, int flags])
    Registers a UDF with the sqlite db handle */
-static PHP_METHOD(SQLite, sqliteCreateFunction)
+static PHP_METHOD(PDO, sqliteCreateFunction)
 {
 	struct pdo_sqlite_func *func;
 	zval *callback;
@@ -566,7 +585,7 @@ static PHP_METHOD(SQLite, sqliteCreateFunction)
 }
 /* }}} */
 
-/* {{{ bool SQLite::sqliteCreateAggregate(string name, mixed step, mixed fini [, int argcount])
+/* {{{ bool PDO::sqliteCreateAggregate(string name, mixed step, mixed fini [, int argcount])
    Registers a UDF with the sqlite db handle */
 
 /* The step function should have the prototype:
@@ -585,7 +604,7 @@ static PHP_METHOD(SQLite, sqliteCreateFunction)
    aggregate UDF.
 */
 
-static PHP_METHOD(SQLite, sqliteCreateAggregate)
+static PHP_METHOD(PDO, sqliteCreateAggregate)
 {
 	struct pdo_sqlite_func *func;
 	zval *step_callback, *fini_callback;
@@ -647,9 +666,9 @@ static PHP_METHOD(SQLite, sqliteCreateAggregate)
 }
 /* }}} */
 
-/* {{{ bool SQLite::sqliteCreateCollation(string name, mixed callback)
+/* {{{ bool PDO::sqliteCreateCollation(string name, mixed callback)
    Registers a collation with the sqlite db handle */
-static PHP_METHOD(SQLite, sqliteCreateCollation)
+static PHP_METHOD(PDO, sqliteCreateCollation)
 {
 	struct pdo_sqlite_collation *collation;
 	zval *callback;
@@ -696,9 +715,9 @@ static PHP_METHOD(SQLite, sqliteCreateCollation)
 /* }}} */
 
 static const zend_function_entry dbh_methods[] = {
-	PHP_ME(SQLite, sqliteCreateFunction, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(SQLite, sqliteCreateAggregate, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(SQLite, sqliteCreateCollation, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(PDO, sqliteCreateFunction,  arginfo_pdo_sqlite_create_function,  ZEND_ACC_PUBLIC)
+	PHP_ME(PDO, sqliteCreateAggregate, arginfo_pdo_sqlite_create_aggregate, ZEND_ACC_PUBLIC)
+	PHP_ME(PDO, sqliteCreateCollation, arginfo_pdo_sqlite_create_collation, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 
