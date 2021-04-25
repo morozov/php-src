@@ -617,6 +617,8 @@ function mysqli_get_server_version(mysqli $mysql): int {}
 
 function mysqli_get_warnings(mysqli $mysql): mysqli_warning|false {}
 
+function mysqli_in_transaction(mysqli $mysql): bool {}
+
 function mysqli_init(): mysqli|false {}
 
 function mysqli_info(mysqli $mysql): ?string {}

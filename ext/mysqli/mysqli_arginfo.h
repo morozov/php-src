@@ -152,6 +152,10 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_mysqli_get_client_version arginfo_mysqli_connect_errno
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_mysqli_in_transaction, 0, 1, _IS_BOOL, 0)
+	ZEND_ARG_OBJ_INFO(0, mysql, mysqli, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_mysqli_get_links_stats, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
@@ -470,6 +474,9 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_mysqli_get_warnings arginfo_class_mysqli_character_set_name
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_mysqli_in_transaction, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 #define arginfo_class_mysqli_init arginfo_class_mysqli_character_set_name
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_mysqli_kill, 0, 0, 1)
@@ -727,12 +734,14 @@ ZEND_FUNCTION(mysqli_get_client_stats);
 ZEND_FUNCTION(mysqli_get_charset);
 ZEND_FUNCTION(mysqli_get_client_info);
 ZEND_FUNCTION(mysqli_get_client_version);
+ZEND_FUNCTION(mysqli_get_in_transaction);
 ZEND_FUNCTION(mysqli_get_links_stats);
 ZEND_FUNCTION(mysqli_get_host_info);
 ZEND_FUNCTION(mysqli_get_proto_info);
 ZEND_FUNCTION(mysqli_get_server_info);
 ZEND_FUNCTION(mysqli_get_server_version);
 ZEND_FUNCTION(mysqli_get_warnings);
+ZEND_FUNCTION(mysqli_in_transaction);
 ZEND_FUNCTION(mysqli_init);
 ZEND_FUNCTION(mysqli_info);
 ZEND_FUNCTION(mysqli_insert_id);
@@ -861,6 +870,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(mysqli_get_server_info, arginfo_mysqli_get_server_info)
 	ZEND_FE(mysqli_get_server_version, arginfo_mysqli_get_server_version)
 	ZEND_FE(mysqli_get_warnings, arginfo_mysqli_get_warnings)
+	ZEND_FE(mysqli_in_transaction, arginfo_mysqli_in_transaction)
 	ZEND_FE(mysqli_init, arginfo_mysqli_init)
 	ZEND_FE(mysqli_info, arginfo_mysqli_info)
 	ZEND_FE(mysqli_insert_id, arginfo_mysqli_insert_id)
@@ -960,6 +970,7 @@ static const zend_function_entry class_mysqli_methods[] = {
 #endif
 	ZEND_ME_MAPPING(get_server_info, mysqli_get_server_info, arginfo_class_mysqli_get_server_info, ZEND_ACC_PUBLIC)
 	ZEND_ME_MAPPING(get_warnings, mysqli_get_warnings, arginfo_class_mysqli_get_warnings, ZEND_ACC_PUBLIC)
+	ZEND_ME_MAPPING(in_transaction, mysqli_in_transaction, arginfo_class_mysqli_in_transaction, ZEND_ACC_PUBLIC)
 	ZEND_ME(mysqli, init, arginfo_class_mysqli_init, ZEND_ACC_PUBLIC)
 	ZEND_ME_MAPPING(kill, mysqli_kill, arginfo_class_mysqli_kill, ZEND_ACC_PUBLIC)
 	ZEND_ME_MAPPING(multi_query, mysqli_multi_query, arginfo_class_mysqli_multi_query, ZEND_ACC_PUBLIC)

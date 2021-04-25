@@ -1110,6 +1110,20 @@ PHP_FUNCTION(mysqli_get_charset)
 }
 /* }}} */
 
+/* {{{ returns whether a transaction is currently active */
+PHP_FUNCTION(mysqli_in_transaction)
+{
+    MY_MYSQL *mysql;
+    zval     *mysql_link;
+
+    if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &mysql_link, mysqli_link_class_entry) == FAILURE) {
+        RETURN_THROWS();
+    }
+
+    MYSQLI_FETCH_RESOURCE_CONN(mysql, mysql_link, MYSQLI_STATUS_VALID);
+    RETURN_BOOL((mysqli_server_status(mysql->mysql) & SERVER_STATUS_IN_TRANS) != 0);
+}/* }}} */
+
 #ifndef MYSQLI_USE_MYSQLND
 extern char * mysqli_escape_string_for_tx_name_in_comment(const char * const name);
 
